@@ -1,10 +1,27 @@
+/**
+ * This file is to help me learn libcurl and boost property_tree
+ * Ignore it, it's nothing special
+ */
+
 #include <curl/curl.h>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <set>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+
+struct sTest
+{
+  int remaining;
+  void load (std::istringstream &stream);
+};
 
 int writer(char *data, size_t size, size_t nmemb, std::string *buffer_in);
 
 int main(void)
-{
+{ 
   CURL *curl;
   CURLcode res;
   struct curl_slist *headers = NULL;
@@ -29,11 +46,18 @@ int main(void)
     if(res != CURLE_OK)
       std::cout << curl_easy_strerror(res) << std::endl;
     
-    std::cout << theData << std::endl;
+    std::cout << "Recived: \n" << theData << "\n\n";
     
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
+    
+    sTest st;
+    std::istringstream ss(theData);
+    st.load(ss);
+    
+    std::cout << "Our ptree claims we have: " << st.remaining << " requests left." << std::endl;
   }
+  
   return 0;
 }
 
@@ -45,4 +69,14 @@ int writer(char *data, size_t size, size_t nmemb, std::string *buffer_in)
     return size * nmemb;
   }
   return 0;
+}
+
+void sTest::load(std::istringstream &stream)
+{
+  using boost::property_tree::ptree;
+  ptree pt;
+  read_json(stream, pt);
+//   BOOST_FOREACH(ptree::value_type &v, pt.get_child("resources.core.remaining"))
+//     core.insert(v.second.data());
+  remaining = pt.get("resources.core.remaining", 0);
 }

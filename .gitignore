@@ -1,0 +1,22 @@
+# Binary files
+src/test1
+
+# Others
+*~
+/doc/doxygen
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.exe
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
