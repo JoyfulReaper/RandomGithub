@@ -27,12 +27,17 @@
 #include <gtkmm.h>
 #include "randomGithub.hpp"
 
-class MainWindow : public Gtk::window 
+class MainWindow : public Gtk::Window 
 {
-  MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder> &refGlade);
+public:
+  MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   virtual ~MainWindow();
   
 protected:
+  void quit();
+  void show_about();
+  void on_about_response(int response_it);
+  
   RandomGithub rg;
   Glib::RefPtr<Gtk::Builder> glade;
   

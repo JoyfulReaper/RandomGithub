@@ -7,10 +7,10 @@ gtkRandomGithub: gtk_main.o mainWindow.o randomGithub.o
 	$(CC) randomGithub.o mainWindow.o gtk_main.o `pkg-config gtkmm-3.0 --libs --cflags` -lcurl -o gtkRandomGithub
 
 gtk_main.o: gtk_main.cpp mainWindow.o
-	$(CC) $(CFLAGS) gtk_main.cpp
+	$(CC) $(CFLAGS) `pkg-config gtkmm-3.0 --cflags` gtk_main.cpp
 
 mainWindow.o: mainWindow.cxx mainWindow.hpp
-	$(CC) $(CFLAGS) mainWindow.cxx
+	$(CC) $(CFLAGS) `pkg-config gtkmm-3.0 --cflags` mainWindow.cxx 
 
 randomGithub: randomGithub.o main.o
 	$(CC) randomGithub.o main.o -lcurl -o randomGithub

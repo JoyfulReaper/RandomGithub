@@ -20,3 +20,52 @@
  * @file mainWindow.cxx
  * @author Kyle Givler
  */
+
+#include "mainWindow.hpp"
+
+MainWindow::MainWindow(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
+ : Gtk::Window(cobject),
+   glade(refGlade),
+   pAboutDialog(0)
+{
+  
+  //About stuff
+  glade->get_widget("aboutDialog", pAboutDialog);
+  if(pAboutDialog)
+    pAboutDialog->signal_response().connect( sigc::mem_fun(*this, &MainWindow::on_about_response) );
+  
+  //Menu stuff
+  Gtk::MenuItem *pAboutItem = 0;
+  glade->get_widget("aboutMenuItem", pAboutItem);
+  if(pAboutItem)
+    pAboutItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::show_about) );
+  
+  Gtk::MenuItem *pQuitItem = 0;
+  glade->get_widget("quitMenuItem", pQuitItem);
+  if(pAboutItem)
+    pQuitItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::quit) );
+}
+
+MainWindow::~MainWindow() {}
+
+void MainWindow::quit()
+{
+  this->hide();
+  return;
+}
+
+void MainWindow::show_about()
+{
+  pAboutDialog->show();
+  pAboutDialog->present();
+  return;
+}
+
+void MainWindow::on_about_response(int response_id)
+{
+  if( (response_id == Gtk::RESPONSE_CLOSE) || (response_id == Gtk::RESPONSE_CANCEL) )
+  {
+    pAboutDialog->hide();
+  }
+  return;
+}
