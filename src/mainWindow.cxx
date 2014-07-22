@@ -119,6 +119,7 @@ void MainWindow::getRepos()
    repos = rg.getRandomRepos(MAX_REPOS);
    auto rl = rg.github_getRateLimit();
    requests = rl.remaining;
+   currentRepo = 0;
    update_labels();
 }
 
