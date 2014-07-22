@@ -34,12 +34,26 @@ int main (int argc, char **argv)
 //   std::cout << "Data: " << data << "\n\n";
 //   std::cout << "Headers: " << headers << "\n";
 
+  std::cout << "Please wait, finding random repos just for you!\n\n";
+  auto repos = gh.getRandomRepos(5);
+  for(auto &repo : repos)
+  {
+    std::cout << "ID: " << repo.getRepoId() << std::endl;
+    std::cout << "Owner: " << repo.getOwnerLogin() << std::endl;
+    std::cout << "Owner's GitHub: " << repo.getOwnerHtmlUrl() << std::endl;
+    std::cout << "Repo name: " << repo.getRepoName() << std::endl;
+    std::cout << "Repo Description: " << repo.getRepoDescription() << std::endl;
+    std::cout << "Repo URL: " << repo.getRepoHtmlUrl() << std::endl;
+    std::cout << std::endl;
+  }
+  
   github_ratelimit rl = gh.github_getRateLimit();
+  std::cout << "GitHub rate limiting information: \n";
   std::cout << "Limit: " << rl.limit << std::endl;
   std::cout << "Remaining: " << rl.remaining << std::endl;
-  std::cout << "Reset: " << rl.reset << std::endl;
+  std::cout << "Reset: " << rl.reset << std::endl << std::endl;
   
-  github_repos gr =  gh.github_getAllRepos();
+  
   
   return 0;
 }

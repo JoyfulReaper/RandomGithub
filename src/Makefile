@@ -6,7 +6,7 @@ all: test1 randomGithub
 randomGithub: randomGithub.o main.o
 	$(CC) randomGithub.o main.o -lcurl -o randomGithub
 
-randomGithub.o: randomGithub.cxx randomGithub.hpp
+randomGithub.o: randomGithub.cxx randomGithub.hpp gitRepo.hpp
 	$(CC) $(CFLAGS) randomGithub.cxx
 	
 main.o: main.cpp

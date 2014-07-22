@@ -29,13 +29,13 @@
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
+#include "gitRepo.hpp"
 
 struct github_ratelimit
 {
-  unsigned int limit;
-  unsigned int remaining;
-  unsigned int reset;
+  unsigned int limit;     // Request limit per hour
+  unsigned int remaining; // Requests remaining
+  unsigned int reset;     // Time until limit resets
   
   void load(std::istringstream &stream)
   {
@@ -54,12 +54,12 @@ struct github_ratelimit
 struct github_repos
 {
   std::vector<unsigned int> id;
-  std::vector<std::string> ownerLogin;
-  std::vector<std::string> ownerHtmlUrl;
-  std::vector<std::string> repoName;
-  std::vector<std::string> repoFullName;
-  std::vector<std::string> repoHtmlUrl;
-  std::vector<std::string> repoDescription;
+  std::vector<std::string> ownerLogin;       // Repo Owners login
+  std::vector<std::string> ownerHtmlUrl;     // Repo Owners URL 
+  std::vector<std::string> repoName;         // Repo name
+  std::vector<std::string> repoFullName;     // Repo Full name
+  std::vector<std::string> repoHtmlUrl;      // Repo URL 
+  std::vector<std::string> repoDescription;  // Repo description
   
   void load(std::istringstream &stream)
   {
@@ -83,13 +83,30 @@ struct github_repos
   }
 };
 
-static const unsigned int MAX_REPOS = 23000000;
+static const unsigned int MAX_SINCE = 23000000;
+static const unsigned int MAX_REPOS = 99;
 
 class RandomGithub
 {
 public:
+  /**
+   * Retreive rate limiting information from github 
+   * @return struct contining rate limiting information
+   */
   struct github_ratelimit github_getRateLimit();
+  
+  /**
+   * Retreive information about github repos
+   * @return struct containing information about repos retreived
+   */
   struct github_repos github_getAllRepos(unsigned int since = 0);
+  
+  /**
+   * @return Random number between min and max 
+   */
+  unsigned int getRandomNumber(unsigned int min, unsigned int max);
+  
+  std::vector<GitRepo> getRandomRepos(unsigned int num = 1);
   
   std::string makeJSONRequest(const std::string url);
   std::string makeJSONRequest(const std::string url, std::string &headersOut);

@@ -22,8 +22,9 @@
  */
 
 #include <curl/curl.h>
-#include <iostream>
-
+#include <random>
+#include <chrono>
+#include <algorithm>
 #include "randomGithub.hpp"
 
 struct github_ratelimit RandomGithub::github_getRateLimit()
@@ -38,12 +39,59 @@ struct github_ratelimit RandomGithub::github_getRateLimit()
 
 struct github_repos RandomGithub::github_getAllRepos(unsigned int since)
 {
+  if(since > MAX_SINCE)
+  {
+    throw("since is too large");
+  }
+  
   github_repos gr;
   
   std::istringstream ss(makeJSONRequest("https://api.github.com/repositories?since=" + std::to_string(since)));
   gr.load(ss);
   
   return gr;
+}
+
+unsigned int RandomGithub::getRandomNumber(unsigned int min, unsigned int max)
+{
+  size_t seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::mt19937 gen(seed);
+  std::uniform_int_distribution<int> dist(min, max);
+  
+  return ( dist(gen) );
+}
+
+std::vector<GitRepo> RandomGithub::getRandomRepos(unsigned int num)
+{
+  if(num > MAX_REPOS)
+    num = MAX_REPOS;
+  
+  std::vector<GitRepo> repos;
+  unsigned int since = RandomGithub::getRandomNumber(0, MAX_SINCE);
+  github_repos gr = github_getAllRepos(since);
+  
+  for(size_t i = 0; i < gr.id.size(); i++)
+  {
+    GitRepo repo;
+    repo.setRepoId(gr.id[i]);
+    repo.setOwnerLogin(gr.ownerLogin[i]);
+    repo.setOwnerHtmlUrl(gr.ownerHtmlUrl[i]);
+    repo.setRepoName(gr.repoName[i]);
+    repo.setRepoFullName(gr.repoFullName[i]);
+    repo.setRepoHtmlUrl(gr.repoHtmlUrl[i]);
+    repo.setRepoDescription(gr.repoDescription[i]);
+    repos.push_back(repo);
+  }
+  
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  shuffle (repos.begin(), repos.end(), std::default_random_engine(seed));
+  
+  while(repos.size() > num)
+  {
+    repos.pop_back();
+  }
+  
+  return repos;
 }
 
 std::string RandomGithub::makeJSONRequest(const std::string url)
@@ -54,8 +102,8 @@ std::string RandomGithub::makeJSONRequest(const std::string url)
 
 std::string RandomGithub::makeJSONRequest(const std::string url, std::string &headersOut)
 {
-  CURL *curl;
-  CURLcode res;
+  CURL *curl = NULL;
+  CURLcode res = CURLE_OK;
   struct curl_slist *headers = NULL;
   
   std::string dataBuffer;
