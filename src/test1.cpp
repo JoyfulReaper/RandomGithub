@@ -19,6 +19,7 @@ struct sTest
 };
 
 int writer(char *data, size_t size, size_t nmemb, std::string *buffer_in);
+int headerWriter(char *data, size_t size, size_t nitems, std::string *buffer_in);
 
 int main(void)
 { 
@@ -32,9 +33,12 @@ int main(void)
   curl = curl_easy_init();
   
   std::string theData;
+  std::string theHeader;
   
   if(curl)
   {
+    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, headerWriter);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void *)&theHeader);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "JoyfulReaper");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/rate_limit");
@@ -47,6 +51,7 @@ int main(void)
       std::cout << curl_easy_strerror(res) << std::endl;
     
     std::cout << "Recived: \n" << theData << "\n\n";
+    std::cout << "Recived: \n" << theHeader << "\n\n";
     
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
@@ -58,6 +63,16 @@ int main(void)
     std::cout << "Our ptree claims we have: " << st.remaining << " requests left." << std::endl;
   }
   
+  return 0;
+}
+
+int headerWriter(char *data, size_t size, size_t nitems, std::string *buffer_in)
+{
+  if(buffer_in != NULL)
+  {
+    buffer_in->append(data, size * nitems);
+    return size * nitems;
+  }
   return 0;
 }
 
