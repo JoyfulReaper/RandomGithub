@@ -86,7 +86,7 @@ std::vector<GitRepo> RandomGithub::getRandomRepos(unsigned int num)
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   shuffle (repos.begin(), repos.end(), std::default_random_engine(seed));
   
-  while(repos.size() > num)
+  while(repos.size() > num + 1)
   {
     repos.pop_back();
   }

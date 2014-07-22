@@ -35,6 +35,7 @@ public:
   virtual ~MainWindow();
   
 protected:
+  void getRepos();
   void quit();
   void show_about();
   void on_about_response(int response_it);
@@ -51,11 +52,13 @@ protected:
   Gtk::AboutDialog *pAboutDialog;
   Gtk::Button *pPrevButton;
   Gtk::Button *pNextButton;
+  Gtk::Button *pGetButton;
   Gtk::Label *LID;
   Gtk::Label *LOwner;
   Gtk::Label *LName;
   Gtk::Label *LDescription;
   Gtk::Label *LRequests;
+  Gtk::Label *LCurrent;
   Gtk::LinkButton *LRepoHTML;
   Gtk::LinkButton *LOwnerHTML;
 };

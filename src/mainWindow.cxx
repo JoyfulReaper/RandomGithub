@@ -25,22 +25,21 @@
 #include "mainWindow.hpp"
 
 MainWindow::MainWindow(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
- : Gtk::Window(cobject),
-   glade(refGlade),
-   pAboutDialog(0),
-   pPrevButton(0),
-   pNextButton(0),
-   LID(0),
-   LOwner(0),
-   LName(0),
-   LDescription(0),
-   LRequests(0),
-   LRepoHTML(0),
-   LOwnerHTML(0)
-{
-  std::cout << "Waiting for github to respond...";
-  std::cout.flush();
-  
+: Gtk::Window(cobject),
+glade(refGlade),
+pAboutDialog(0),
+pPrevButton(0),
+pNextButton(0),
+pGetButton(0),
+LID(0),
+LOwner(0),
+LName(0),
+LDescription(0),
+LRequests(0),
+LCurrent(0),
+LRepoHTML(0),
+LOwnerHTML(0)
+{   
   //Buttons
   glade->get_widget("bPrev", pPrevButton);
   if(pPrevButton)
@@ -50,15 +49,29 @@ MainWindow::MainWindow(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder>
   }
   glade->get_widget("bNext", pNextButton);
   if(pNextButton)
+  {
     pNextButton->signal_clicked().connect( sigc::mem_fun(*this, &MainWindow::next_clicked) );
+    pNextButton->set_sensitive(false);
+  }
+  glade->get_widget("bGet", pGetButton);
+  if(pGetButton)
+    pGetButton->signal_clicked().connect( sigc::mem_fun(*this, &MainWindow::getRepos) );
   
   //Labels
   glade->get_widget("lID", LID);
   glade->get_widget("lOwner", LOwner);
   glade->get_widget("lName", LName);
+  glade->get_widget("lCurrent", LCurrent);
+  if (LCurrent)
+  {
+    LCurrent->set_label("Current: 0");
+  }
   glade->get_widget("lDescription", LDescription);
-  LDescription->set_line_wrap_mode(Pango::WRAP_WORD);
-  LDescription->set_line_wrap(true);
+  if(LDescription)
+  {
+    LDescription->set_line_wrap_mode(Pango::WRAP_WORD);
+    LDescription->set_line_wrap(true);
+  }
   glade->get_widget("lRequests", LRequests);
   
   //LinkButtons
@@ -91,13 +104,23 @@ MainWindow::MainWindow(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder>
   if(pAboutItem)
     pQuitItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::quit) );
   
-  repos = rg.getRandomRepos(MAX_REPOS);
-  auto rl = rg.github_getRateLimit();
-  requests = rl.remaining;
-  update_labels();
+  Gtk::MenuItem *pGetItem = 0;
+  glade->get_widget("getMenuItem", pGetItem);
+  if(pGetItem)
+    pGetItem->signal_activate().connect( sigc::mem_fun(*this, &MainWindow::getRepos) );
 }
 
 MainWindow::~MainWindow() {}
+
+void MainWindow::getRepos()
+{
+   LCurrent->set_label("Working...");
+   
+   repos = rg.getRandomRepos(MAX_REPOS);
+   auto rl = rg.github_getRateLimit();
+   requests = rl.remaining;
+   update_labels();
+}
 
 void MainWindow::quit()
 {
@@ -137,14 +160,14 @@ void MainWindow::next_clicked()
 
 void MainWindow::update_labels()
 {
-  if(currentRepo == 0)
+  if(currentRepo == 0 || repos.empty())
   {
     pPrevButton->set_sensitive(false);
   } else {
     pPrevButton->set_sensitive(true);
   }
   
-  if(currentRepo == repos.size())
+  if(currentRepo == repos.size() -1 || repos.empty())
   {
     pNextButton->set_sensitive(false);
   } else {
@@ -161,6 +184,8 @@ void MainWindow::update_labels()
   LRepoHTML->set_uri(repos[currentRepo].getRepoHtmlUrl());
   LOwnerHTML->set_label(repos[currentRepo].getOwnerHtmlUrl());
   LOwnerHTML->set_uri(repos[currentRepo].getOwnerHtmlUrl());
+  
+  LCurrent->set_label("Current: " + std::to_string(currentRepo));
   
   return;
 }
