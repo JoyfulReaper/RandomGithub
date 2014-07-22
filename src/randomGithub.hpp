@@ -26,8 +26,10 @@
 
 #include <string>
 #include <sstream>
+#include <set>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
 
 struct github_ratelimit
 {
@@ -56,6 +58,21 @@ struct github_repo
   std::string repoFullName;
   std::string repoHtmlUrl;
   std::string repoDescription;
+  
+  void load(const std::string &filename)
+  {
+    using boost::property_tree::ptree;
+    ptree pt;
+    read_json("test.json", pt);
+    
+    std::cout << pt.get<std::string>(".id") << "\n";
+    
+    while (!pt.empty())
+    {
+      std::cout << pt.get<std::string>(".id") << "\n";
+      pt.pop_front();
+    }
+  }
 };
 
 static const unsigned int MAX_REPOS = 23000000;
@@ -64,6 +81,7 @@ class RandomGithub
 {
 public:
   struct github_ratelimit github_getRateLimit();
+  struct github_repo github_getAllRepos();
   
   std::string makeJSONRequest(const std::string url);
   std::string makeJSONRequest(const std::string url, std::string &headersOut);

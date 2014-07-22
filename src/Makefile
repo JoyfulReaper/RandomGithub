@@ -1,4 +1,5 @@
 CC = g++
+CFLAGS = --std=c++11 -c -O0 -ggdb
 
 all: test1 randomGithub
 
@@ -6,10 +7,10 @@ randomGithub: randomGithub.o main.o
 	$(CC) randomGithub.o main.o -lcurl -o randomGithub
 
 randomGithub.o: randomGithub.cxx randomGithub.hpp
-	$(CC) -c -O0 -ggdb randomGithub.cxx
+	$(CC) $(CFLAGS) randomGithub.cxx
 	
 main.o: main.cpp
-	$(CC) -c -O0 -ggdb main.cpp
+	$(CC) $(CFLAGS) -ggdb main.cpp
 	
 test1: test1.o
 	$(CC) test1.o -lcurl -o test1

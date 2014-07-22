@@ -36,6 +36,15 @@ struct github_ratelimit RandomGithub::github_getRateLimit()
   return rl;
 }
 
+struct github_repo RandomGithub::github_getAllRepos()
+{
+  github_repo gr;
+  
+  gr.load("DDD");
+  
+  return gr;
+}
+
 std::string RandomGithub::makeJSONRequest(const std::string url)
 {
   std::string ignore;
