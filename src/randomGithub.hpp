@@ -26,7 +26,7 @@
 
 #include <string>
 #include <sstream>
-#include <set>
+#include <vector>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
@@ -46,32 +46,40 @@ struct github_ratelimit
     limit = pt.get("rate.limit", 0);
     remaining = pt.get("rate.remaining", 0);
     reset = pt.get("rate.reset", 0);
+    
+    return;
   }
 };
 
-struct github_repo
+struct github_repos
 {
-  unsigned int id;
-  std::string ownerLogin;
-  std::string ownerHtmlUrl;
-  std::string repoName;
-  std::string repoFullName;
-  std::string repoHtmlUrl;
-  std::string repoDescription;
+  std::vector<unsigned int> id;
+  std::vector<std::string> ownerLogin;
+  std::vector<std::string> ownerHtmlUrl;
+  std::vector<std::string> repoName;
+  std::vector<std::string> repoFullName;
+  std::vector<std::string> repoHtmlUrl;
+  std::vector<std::string> repoDescription;
   
-  void load(const std::string &filename)
+  void load(std::istringstream &stream)
   {
     using boost::property_tree::ptree;
     ptree pt;
-    read_json("test.json", pt);
-    
-    std::cout << pt.get<std::string>(".id") << "\n";
+    read_json(stream, pt);
     
     while (!pt.empty())
     {
-      std::cout << pt.get<std::string>(".id") << "\n";
+      id.push_back(pt.get(".id", 0));
+      ownerLogin.push_back(pt.get(".owner.login", "unknown"));
+      ownerHtmlUrl.push_back(pt.get(".owner.html_url", "unknown"));
+      repoName.push_back(pt.get(".name", "unknown"));
+      repoFullName.push_back(pt.get(".full_name", "unknown"));
+      repoHtmlUrl.push_back(pt.get(".html_url", "unknown"));
+      repoDescription.push_back(pt.get(".description", "unknown"));
       pt.pop_front();
     }
+    
+    return;
   }
 };
 
@@ -81,7 +89,7 @@ class RandomGithub
 {
 public:
   struct github_ratelimit github_getRateLimit();
-  struct github_repo github_getAllRepos();
+  struct github_repos github_getAllRepos(unsigned int since = 0);
   
   std::string makeJSONRequest(const std::string url);
   std::string makeJSONRequest(const std::string url, std::string &headersOut);

@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = --std=c++11 -c -O0 -ggdb
+CFLAGS = --std=c++11 -c -O0 -ggdb -Wall -Wextra
 
 all: test1 randomGithub
 

@@ -36,11 +36,12 @@ struct github_ratelimit RandomGithub::github_getRateLimit()
   return rl;
 }
 
-struct github_repo RandomGithub::github_getAllRepos()
+struct github_repos RandomGithub::github_getAllRepos(unsigned int since)
 {
-  github_repo gr;
+  github_repos gr;
   
-  gr.load("DDD");
+  std::istringstream ss(makeJSONRequest("https://api.github.com/repositories?since=" + std::to_string(since)));
+  gr.load(ss);
   
   return gr;
 }

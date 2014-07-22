@@ -33,14 +33,13 @@ int main (int argc, char **argv)
 //   std::cout << "Raw input: \n";
 //   std::cout << "Data: " << data << "\n\n";
 //   std::cout << "Headers: " << headers << "\n";
-//   
-//   
-//   github_ratelimit rl = gh.github_getRateLimit();
-//   std::cout << "Limit: " << rl.limit << std::endl;
-//   std::cout << "Remaining: " << rl.remaining << std::endl;
-//   std::cout << "Reset: " << rl.reset << std::endl;
+
+  github_ratelimit rl = gh.github_getRateLimit();
+  std::cout << "Limit: " << rl.limit << std::endl;
+  std::cout << "Remaining: " << rl.remaining << std::endl;
+  std::cout << "Reset: " << rl.reset << std::endl;
   
-  gh.github_getAllRepos();
+  github_repos gr =  gh.github_getAllRepos();
   
   return 0;
 }
