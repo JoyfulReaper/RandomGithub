@@ -8,3 +8,7 @@ Dependencies
 ============
 libcurl (http://curl.haxx.se/libcurl/)  
 Boost (Headers only) (http://boost.org)
+
+Contributors
+============
+Kyle Givler - Orignial Author
