@@ -30,7 +30,15 @@ int main (int argc, char **argv)
   std::string headers;
   std::string data = gh.makeJSONRequest("https://api.github.com/rate_limit", headers);
   
+  std::cout << "Raw input: \n";
   std::cout << "Data: " << data << "\n\n";
   std::cout << "Headers: " << headers << "\n";
+  
+  
+  github_ratelimit rl = gh.github_getRateLimit();
+  std::cout << "Limit: " << rl.limit << std::endl;
+  std::cout << "Remaining: " << rl.remaining << std::endl;
+  std::cout << "Reset: " << rl.reset << std::endl;
+  
   return 0;
 }

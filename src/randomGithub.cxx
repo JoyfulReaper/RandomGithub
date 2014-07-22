@@ -26,6 +26,16 @@
 
 #include "randomGithub.hpp"
 
+struct github_ratelimit RandomGithub::github_getRateLimit()
+{
+  github_ratelimit rl;
+  
+  std::istringstream ss(makeJSONRequest("https://api.github.com/rate_limit"));
+  rl.load(ss);
+  
+  return rl;
+}
+
 std::string RandomGithub::makeJSONRequest(const std::string url)
 {
   std::string ignore;

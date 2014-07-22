@@ -25,11 +25,26 @@
 #define _RANDOM_GITHUB_H_
 
 #include <string>
+#include <sstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 struct github_ratelimit
 {
   unsigned int limit;
-  unsigned int remaing;
+  unsigned int remaining;
+  unsigned int reset;
+  
+  void load(std::istringstream &stream)
+  {
+    using boost::property_tree::ptree;
+    ptree pt;
+    read_json(stream, pt);
+    
+    limit = pt.get("rate.limit", 0);
+    remaining = pt.get("rate.remaining", 0);
+    reset = pt.get("rate.reset", 0);
+  }
 };
 
 struct github_repo
@@ -48,6 +63,8 @@ static const unsigned int MAX_REPOS = 23000000;
 class RandomGithub
 {
 public:
+  struct github_ratelimit github_getRateLimit();
+  
   std::string makeJSONRequest(const std::string url);
   std::string makeJSONRequest(const std::string url, std::string &headersOut);
   
