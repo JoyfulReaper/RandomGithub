@@ -25,6 +25,7 @@
 #define _MAIN_WINDOW_H_
 
 #include <gtkmm.h>
+#include <vector>
 #include "randomGithub.hpp"
 
 class MainWindow : public Gtk::Window 
@@ -37,11 +38,26 @@ protected:
   void quit();
   void show_about();
   void on_about_response(int response_it);
+  void next_clicked();
+  void prev_clicked();
+  void update_labels();
   
   RandomGithub rg;
-  Glib::RefPtr<Gtk::Builder> glade;
+  std::vector<GitRepo> repos;
+  size_t currentRepo = 0;
+  size_t requests = 0;
   
+  Glib::RefPtr<Gtk::Builder> glade;
   Gtk::AboutDialog *pAboutDialog;
+  Gtk::Button *pPrevButton;
+  Gtk::Button *pNextButton;
+  Gtk::Label *LID;
+  Gtk::Label *LOwner;
+  Gtk::Label *LName;
+  Gtk::Label *LDescription;
+  Gtk::Label *LRequests;
+  Gtk::LinkButton *LRepoHTML;
+  Gtk::LinkButton *LOwnerHTML;
 };
 
 #endif
