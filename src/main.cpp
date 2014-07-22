@@ -35,7 +35,14 @@ int main (int argc, char **argv)
 //   std::cout << "Headers: " << headers << "\n";
 
   std::cout << "Please wait, finding random repos just for you!\n\n";
+  
   auto repos = gh.getRandomRepos(5);
+  
+  if(repos.size() == 0)
+  {
+    std::cout << "No repos found! \"since\" is probably too large!\n"
+  }
+  
   for(auto &repo : repos)
   {
     std::cout << "ID: " << repo.getRepoId() << std::endl;
