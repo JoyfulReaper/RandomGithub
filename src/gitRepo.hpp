@@ -16,6 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file gitRepo.hpp
+ * @author Kyle Givler
+ */
+
 #ifndef _GITHUB_REPO_H_
 #define _GITHUB_REPO_H_
 

@@ -40,7 +40,7 @@ int main (int argc, char **argv)
   
   if(repos.size() == 0)
   {
-    std::cout << "No repos found! \"since\" is probably too large!\n"
+    std::cout << "No repos found! \"since\" is probably too large!\n";
   }
   
   for(auto &repo : repos)
