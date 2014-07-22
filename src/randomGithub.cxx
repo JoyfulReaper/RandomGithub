@@ -21,5 +21,77 @@
  * @author Kyle Givler
  */
 
+#include <curl/curl.h>
+#include <iostream>
+
 #include "randomGithub.hpp"
 
+std::string RandomGithub::makeJSONRequest(const std::string url)
+{
+  std::string ignore;
+  return makeJSONRequest(url, ignore);
+}
+
+std::string RandomGithub::makeJSONRequest(const std::string url, std::string &headersOut)
+{
+  CURL *curl;
+  CURLcode res;
+  struct curl_slist *headers = NULL;
+  
+  std::string dataBuffer;
+  std::string headerBuffer;
+  
+  curl = curl_easy_init();
+  curl_slist_append(headers, "Accept: application/json");
+  curl_slist_append(headers, "Content-Type: application/json");
+  curl_slist_append(headers, "charsets: utf-8");
+  
+  if(curl)
+  {
+    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, reciveHeaders);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void *)&headerBuffer);
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "JoyfulReaper");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, reciveData);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&dataBuffer);
+  } else {
+    std::cerr << curl_easy_strerror(res) << std::endl;
+    throw("Something went wrong, curl is null!\n");
+  }
+  
+  res = curl_easy_perform(curl);
+  
+  curl_easy_cleanup(curl);
+  curl_slist_free_all(headers);
+  
+  if(res != CURLE_OK)
+  {
+    std::cerr << curl_easy_strerror(res) << std::endl;
+    throw("Something went wrong :(\n");
+  }
+  
+  headersOut = headerBuffer;
+  return dataBuffer;
+}
+
+size_t reciveData(char *buffer, size_t size, size_t nmemb, std::string *buffer_in)
+{
+  if(buffer_in != NULL)
+  {
+    buffer_in->append(buffer, size * nmemb);
+    return size * nmemb;
+  }
+  return 0;
+}
+
+size_t reciveHeaders(char *buffer, size_t size, size_t nitems, std::string *buffer_in)
+{
+  if(buffer_in != NULL)
+  {
+    buffer_in->append(buffer, size * nitems);
+    return size * nitems;
+  }
+  return 0;
+}

@@ -48,8 +48,13 @@ static const unsigned int MAX_REPOS = 23000000;
 class RandomGithub
 {
 public:
+  std::string makeJSONRequest(const std::string url);
+  std::string makeJSONRequest(const std::string url, std::string &headersOut);
   
 private:
 };
+
+size_t reciveHeaders(char *buffer, size_t size, size_t nitems, std::string *buffer_in);
+size_t reciveData(char *buffer, size_t size, size_t nmemb, std::string *buffer_in);
 
 #endif

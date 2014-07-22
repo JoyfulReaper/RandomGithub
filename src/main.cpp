@@ -22,9 +22,15 @@
  */
 
 #include "randomGithub.hpp"
+#include <iostream>
 
 int main (int argc, char **argv)
 {
+  RandomGithub gh;
+  std::string headers;
+  std::string data = gh.makeJSONRequest("https://api.github.com/rate_limit", headers);
   
+  std::cout << "Data: " << data << "\n\n";
+  std::cout << "Headers: " << headers << "\n";
   return 0;
 }

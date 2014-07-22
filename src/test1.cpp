@@ -91,7 +91,5 @@ void sTest::load(std::istringstream &stream)
   using boost::property_tree::ptree;
   ptree pt;
   read_json(stream, pt);
-//   BOOST_FOREACH(ptree::value_type &v, pt.get_child("resources.core.remaining"))
-//     core.insert(v.second.data());
   remaining = pt.get("resources.core.remaining", 0);
 }
