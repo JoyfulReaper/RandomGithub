@@ -57,7 +57,7 @@ int main (int argc, char **argv)
   github_ratelimit rl = gh.github_getRateLimit();
   std::cout << "GitHub rate limiting information: \n";
   std::cout << "Limit: " << rl.limit << std::endl;
-  std::cout << "Remaining: " << rl.remaining << std::endl;
+  std::cout << "API Requests Remaining: " << rl.remaining << std::endl;
   std::cout << "Reset: " << rl.reset << std::endl << std::endl;
   
   

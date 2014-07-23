@@ -179,14 +179,14 @@ void MainWindow::update_labels()
   LOwner->set_text("Owner: " + repos[currentRepo].getOwnerLogin());
   LName->set_text("Name: " + repos[currentRepo].getRepoName());
   LDescription->set_text("Description: " + repos[currentRepo].getRepoDescription());
-  LRequests->set_text("Requests: " + std::to_string(requests));
+  LRequests->set_text("API Requests Remaining: " + std::to_string(requests));
   
   LRepoHTML->set_label(repos[currentRepo].getRepoHtmlUrl());
   LRepoHTML->set_uri(repos[currentRepo].getRepoHtmlUrl());
   LOwnerHTML->set_label(repos[currentRepo].getOwnerHtmlUrl());
   LOwnerHTML->set_uri(repos[currentRepo].getOwnerHtmlUrl());
   
-  LCurrent->set_label("Current: " + std::to_string(currentRepo));
+  LCurrent->set_label("Current Project: " + std::to_string(currentRepo));
   
   return;
 }
