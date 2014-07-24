@@ -11,7 +11,9 @@ randomGithub (console version)
 and  
 gtkRandomGithub (GTK version)  
 
-use make to build. Uses a stupid handcoded make file, it requires pkg-config, and may require some tweaking for your setup. Also, if you don't want to build the GUI client (which is much more useful IMHO) you can just do 'make randomGithub'
+use make to build. Uses a stupid handcoded make file, it requires pkg-config, and may require some tweaking for your setup. Also, if you don't want to build the GUI client (which is much more useful IMHO) you can just do 'make randomGithub'  
+
+On the off chance you find this usefull, feel free to get me a book or something form my Amazon wishlist :) If you find this useful or fun feel free to get me something from my Amazon wishlist :) http://amzn.com/w/2Y6UMLRG23W6W
 
 Usage:
 =====
