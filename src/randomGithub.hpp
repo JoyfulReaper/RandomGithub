@@ -53,7 +53,7 @@ struct github_ratelimit
 
 struct github_repos
 {
-  std::vector<unsigned int> id;
+  std::vector<int> id;
   std::vector<std::string> ownerLogin;       // Repo Owners login
   std::vector<std::string> ownerHtmlUrl;     // Repo Owners URL 
   std::vector<std::string> repoName;         // Repo name
@@ -69,7 +69,7 @@ struct github_repos
     
     while (!pt.empty())
     {
-      id.push_back(pt.get(".id", 0));
+      id.push_back(pt.get(".id", -1));
       ownerLogin.push_back(pt.get(".owner.login", "unknown"));
       ownerHtmlUrl.push_back(pt.get(".owner.html_url", "unknown"));
       repoName.push_back(pt.get(".name", "unknown"));
@@ -78,7 +78,6 @@ struct github_repos
       repoDescription.push_back(pt.get(".description", "unknown"));
       pt.pop_front();
     }
-    
     return;
   }
 };

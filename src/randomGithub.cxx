@@ -76,15 +76,18 @@ std::vector<GitRepo> RandomGithub::getRandomRepos(unsigned int num, unsigned int
     
     for(size_t i = 0; i < gr.id.size(); i++)
     {
-      GitRepo repo;
-      repo.setRepoId(gr.id[i]);
-      repo.setOwnerLogin(gr.ownerLogin[i]);
-      repo.setOwnerHtmlUrl(gr.ownerHtmlUrl[i]);
-      repo.setRepoName(gr.repoName[i]);
-      repo.setRepoFullName(gr.repoFullName[i]);
-      repo.setRepoHtmlUrl(gr.repoHtmlUrl[i]);
-      repo.setRepoDescription(gr.repoDescription[i]);
-      repos.push_back(repo);
+      if(gr.id[i] != -1)
+      {
+	GitRepo repo;
+	repo.setRepoId(gr.id[i]);
+	repo.setOwnerLogin(gr.ownerLogin[i]);
+	repo.setOwnerHtmlUrl(gr.ownerHtmlUrl[i]);
+	repo.setRepoName(gr.repoName[i]);
+	repo.setRepoFullName(gr.repoFullName[i]);
+	repo.setRepoHtmlUrl(gr.repoHtmlUrl[i]);
+	repo.setRepoDescription(gr.repoDescription[i]);
+	repos.push_back(repo);
+      }
     }
     
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();

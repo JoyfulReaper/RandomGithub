@@ -189,6 +189,12 @@ void MainWindow::update_labels()
     pNextButton->set_sensitive(true);
   }
   
+  if(repos.empty())
+  {
+    LCurrent->set_label("No projects found...");
+    return;
+  }
+  
   LID->set_text("ID: " + std::to_string(repos[currentRepo].getRepoId()));
   LOwner->set_text("Owner: " + repos[currentRepo].getOwnerLogin());
   LName->set_text("Name: " + repos[currentRepo].getRepoName());
@@ -199,11 +205,7 @@ void MainWindow::update_labels()
   LRepoHTML->set_uri(repos[currentRepo].getRepoHtmlUrl());
   LOwnerHTML->set_label(repos[currentRepo].getOwnerHtmlUrl());
   LOwnerHTML->set_uri(repos[currentRepo].getOwnerHtmlUrl());
-  
-  if(repos.size() == 0)
-    LCurrent->set_label("No projects found...");
-  else
-    LCurrent->set_label("Current Project: " + std::to_string((currentRepo +1)) + "/" + std::to_string(repos.size()));
+  LCurrent->set_label("Current Project: " + std::to_string((currentRepo +1)) + "/" + std::to_string(repos.size()));
   
   return;
 }
