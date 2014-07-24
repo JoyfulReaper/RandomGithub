@@ -118,9 +118,9 @@ std::string RandomGithub::makeJSONRequest(const std::string url, std::string &he
   std::string headerBuffer;
   
   curl = curl_easy_init();
-  curl_slist_append(headers, "Accept: application/json");
-  curl_slist_append(headers, "Content-Type: application/json");
-  curl_slist_append(headers, "charsets: utf-8");
+  headers = curl_slist_append(headers, "Accept: application/json");
+  headers = curl_slist_append(headers, "Content-Type: application/json");
+  headers = curl_slist_append(headers, "charsets: utf-8");
   
   if(curl)
   {
