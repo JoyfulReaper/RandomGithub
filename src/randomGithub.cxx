@@ -61,30 +61,35 @@ unsigned int RandomGithub::getRandomNumber(unsigned int min, unsigned int max)
   return ( dist(gen) );
 }
 
-std::vector<GitRepo> RandomGithub::getRandomRepos(unsigned int num)
+std::vector<GitRepo> RandomGithub::getRandomRepos(unsigned int num, unsigned int requests)
 {
   if(num > MAX_REPOS)
     num = MAX_REPOS;
   
   std::vector<GitRepo> repos;
-  unsigned int since = RandomGithub::getRandomNumber(0, MAX_SINCE);
-  github_repos gr = github_getAllRepos(since);
   
-  for(size_t i = 0; i < gr.id.size(); i++)
+  for(size_t i = 0; i < requests; i++)
   {
-    GitRepo repo;
-    repo.setRepoId(gr.id[i]);
-    repo.setOwnerLogin(gr.ownerLogin[i]);
-    repo.setOwnerHtmlUrl(gr.ownerHtmlUrl[i]);
-    repo.setRepoName(gr.repoName[i]);
-    repo.setRepoFullName(gr.repoFullName[i]);
-    repo.setRepoHtmlUrl(gr.repoHtmlUrl[i]);
-    repo.setRepoDescription(gr.repoDescription[i]);
-    repos.push_back(repo);
+    unsigned int since = RandomGithub::getRandomNumber(0, MAX_SINCE);
+    github_repos gr = github_getAllRepos(since);
+    
+    
+    for(size_t i = 0; i < gr.id.size(); i++)
+    {
+      GitRepo repo;
+      repo.setRepoId(gr.id[i]);
+      repo.setOwnerLogin(gr.ownerLogin[i]);
+      repo.setOwnerHtmlUrl(gr.ownerHtmlUrl[i]);
+      repo.setRepoName(gr.repoName[i]);
+      repo.setRepoFullName(gr.repoFullName[i]);
+      repo.setRepoHtmlUrl(gr.repoHtmlUrl[i]);
+      repo.setRepoDescription(gr.repoDescription[i]);
+      repos.push_back(repo);
+    }
+    
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle (repos.begin(), repos.end(), std::default_random_engine(seed));
   }
-  
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  shuffle (repos.begin(), repos.end(), std::default_random_engine(seed));
   
   while(repos.size() > num + 1)
   {

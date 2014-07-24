@@ -32,21 +32,22 @@
 
 int main (int argc, char **argv)
 {
-  RandomGithub gh;
-//   std::string headers;
-//   std::string data = gh.makeJSONRequest("https://api.github.com/rate_limit", headers);
-//   
-//   std::cout << "Raw input: \n";
-//   std::cout << "Data: " << data << "\n\n";
-//   std::cout << "Headers: " << headers << "\n";
-
+  //   std::string headers;
+  //   std::string data = gh.makeJSONRequest("https://api.github.com/rate_limit", headers);
+  //   
+  //   std::cout << "Raw input: \n";
+  //   std::cout << "Data: " << data << "\n\n";
+  //   std::cout << "Headers: " << headers << "\n";
+  
   std::cout << "Please wait, finding random repos just for you!\n\n";
   
-  int num;
+  RandomGithub gh;
+  unsigned int num;
   if(argc == 2)
-    if (! (num = strtol(argv[1], NULL, 10)) )
-      num = 5;
-  
+    num = strtol(argv[1], NULL, 10);
+  if (!num)
+    num = 5;
+
   auto repos = gh.getRandomRepos(num);
   
   if(repos.size() == 0)

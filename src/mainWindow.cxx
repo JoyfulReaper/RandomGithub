@@ -115,16 +115,26 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::getRepos()
 {
-   LCurrent->set_label("Working...");
-   
-   std::thread([this](){
-   repos = rg.getRandomRepos(MAX_REPOS);
-   auto rl = rg.github_getRateLimit();
-   requests = rl.remaining;
-   currentRepo = 0;
-   sleep(1);
-   update_labels();
-   }).detach();
+  LCurrent->set_label("Working...");
+  
+  std::thread([this](){
+    if(pPrevButton->get_sensitive())
+      pPrevButton->set_sensitive(false);
+    if(pNextButton->get_sensitive())
+      pNextButton->set_sensitive(false);
+    pGetButton->set_sensitive(false);
+    
+    auto rl = rg.github_getRateLimit();
+    requests = rl.remaining;
+    repos = rg.getRandomRepos(MAX_REPOS);
+    currentRepo = 0;
+    
+    update_labels();
+    
+    pGetButton->set_sensitive(true);
+    pPrevButton->set_sensitive(true);
+    pNextButton->set_sensitive(true);
+  }).detach();
 }
 
 void MainWindow::quit()

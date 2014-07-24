@@ -106,7 +106,7 @@ public:
    */
   unsigned int getRandomNumber(unsigned int min, unsigned int max);
   
-  std::vector<GitRepo> getRandomRepos(unsigned int num = 1);
+  std::vector<GitRepo> getRandomRepos(unsigned int num = 1, unsigned int requests = 1);
   
   std::string makeJSONRequest(const std::string url);
   std::string makeJSONRequest(const std::string url, std::string &headersOut);
