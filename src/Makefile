@@ -1,7 +1,7 @@
 CC = g++
-CFLAGS = --std=c++11 -c -O0 -ggdb -Wall -Wextra
+CFLAGS = --std=c++11 -c -O0 -ggdb -pthread -Wall -Wextra
 
-all: test1 randomGithub gtkRandomGithub
+all: randomGithub gtkRandomGithub
 
 gtkRandomGithub: gtk_main.o mainWindow.o randomGithub.o
 	$(CC) randomGithub.o mainWindow.o gtk_main.o `pkg-config gtkmm-3.0 --libs --cflags` -lcurl -o gtkRandomGithub

@@ -22,6 +22,7 @@
  */
 
 #include <iostream>
+#include <thread>
 #include "mainWindow.hpp"
 
 MainWindow::MainWindow(BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refGlade)
@@ -116,11 +117,14 @@ void MainWindow::getRepos()
 {
    LCurrent->set_label("Working...");
    
+   std::thread([this](){
    repos = rg.getRandomRepos(MAX_REPOS);
    auto rl = rg.github_getRateLimit();
    requests = rl.remaining;
    currentRepo = 0;
+   sleep(1);
    update_labels();
+   }).detach();
 }
 
 void MainWindow::quit()

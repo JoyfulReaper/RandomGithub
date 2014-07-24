@@ -17,12 +17,18 @@
  */
 
 /**
+ * Usage:
+ * $ randomGithub [num results]
+ */
+
+/**
  * @file main.cpp
  * @author Kyle Givler
  */
 
 #include "randomGithub.hpp"
 #include <iostream>
+#include <cstdlib>
 
 int main (int argc, char **argv)
 {
@@ -36,7 +42,12 @@ int main (int argc, char **argv)
 
   std::cout << "Please wait, finding random repos just for you!\n\n";
   
-  auto repos = gh.getRandomRepos(5);
+  int num;
+  if(argc == 2)
+    if (! (num = strtol(argv[1], NULL, 10)) )
+      num = 5;
+  
+  auto repos = gh.getRandomRepos(num);
   
   if(repos.size() == 0)
   {
