@@ -128,11 +128,12 @@ void MainWindow::getRepos()
     auto rl = rg.github_getRateLimit();
     requests = rl.remaining;
     currentRepo = 0;
-    update_labels();
     
     pGetButton->set_sensitive(true);
     pPrevButton->set_sensitive(true);
     pNextButton->set_sensitive(true);
+    
+    update_labels();
   }).detach();
 }
 
@@ -199,7 +200,10 @@ void MainWindow::update_labels()
   LOwnerHTML->set_label(repos[currentRepo].getOwnerHtmlUrl());
   LOwnerHTML->set_uri(repos[currentRepo].getOwnerHtmlUrl());
   
-  LCurrent->set_label("Current Project: " + std::to_string((currentRepo +1)) + "/" + std::to_string(repos.size()));
+  if(repos.size() == 0)
+    LCurrent->set_label("No projects found...");
+  else
+    LCurrent->set_label("Current Project: " + std::to_string((currentRepo +1)) + "/" + std::to_string(repos.size()));
   
   return;
 }
