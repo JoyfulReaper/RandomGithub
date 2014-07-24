@@ -34,6 +34,8 @@ public:
   MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   virtual ~MainWindow();
   
+  void set_num_requests(size_t num);
+  
 protected:
   void getRepos();
   void quit();
@@ -46,7 +48,8 @@ protected:
   RandomGithub rg;
   std::vector<GitRepo> repos;
   size_t currentRepo = 0;
-  size_t requests = 0;
+  size_t requests = 0; // API Requests remaining
+  size_t numRequests = 1; // Number of API requests to issues (Larger numbers take longer, but produce more random results)
   
   Glib::RefPtr<Gtk::Builder> glade;
   Gtk::AboutDialog *pAboutDialog;

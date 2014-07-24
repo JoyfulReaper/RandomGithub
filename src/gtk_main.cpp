@@ -21,10 +21,18 @@
  * @author Kyle Givler
  */
 
+/*
+ * Usage:
+ * $ gtkRandomGithub [num api requests]
+ */
+
 #include "mainWindow.hpp"
+#include <cstdlib>
 
 int main(int argc, char **argv)
 {  
+  size_t numArgs = argc;
+  argc = 1;
   Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "com.kgivler.randomgithub");
   Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create();
   
@@ -51,9 +59,16 @@ int main(int argc, char **argv)
   MainWindow *pWindow = 0;
   refBuilder->get_widget_derived("mainWindow", pWindow);
   
+  unsigned int numRequests;
+  if(numArgs == 2)
+    numRequests = strtol(argv[1], NULL, 10);
+  if (!numRequests)
+    numRequests = 1;
+  
   if(pWindow)
   {
-    app->run(*pWindow);
+    pWindow->set_num_requests(numRequests);
+    app->run(*pWindow, argc, argv);
   }
   
   delete pWindow;

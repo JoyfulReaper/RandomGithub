@@ -65,7 +65,7 @@ LOwnerHTML(0)
   glade->get_widget("lCurrent", LCurrent);
   if (LCurrent)
   {
-    LCurrent->set_label("Current: 0");
+    LCurrent->set_label("Current: 0/0");
   }
   glade->get_widget("lDescription", LDescription);
   if(LDescription)
@@ -124,11 +124,10 @@ void MainWindow::getRepos()
       pNextButton->set_sensitive(false);
     pGetButton->set_sensitive(false);
     
+    repos = rg.getRandomRepos(MAX_REPOS, numRequests);
     auto rl = rg.github_getRateLimit();
     requests = rl.remaining;
-    repos = rg.getRandomRepos(MAX_REPOS);
     currentRepo = 0;
-    
     update_labels();
     
     pGetButton->set_sensitive(true);
@@ -200,7 +199,15 @@ void MainWindow::update_labels()
   LOwnerHTML->set_label(repos[currentRepo].getOwnerHtmlUrl());
   LOwnerHTML->set_uri(repos[currentRepo].getOwnerHtmlUrl());
   
-  LCurrent->set_label("Current Project: " + std::to_string(currentRepo));
+  LCurrent->set_label("Current Project: " + std::to_string((currentRepo +1)) + "/" + std::to_string(repos.size()));
   
   return;
+}
+
+void MainWindow::set_num_requests(size_t num)
+{
+  if (num > 50)
+    num = 50;
+  
+  numRequests = num;
 }
