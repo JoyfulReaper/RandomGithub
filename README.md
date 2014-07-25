@@ -20,6 +20,10 @@ Usage:
 randomGithub [number of results 0-99]  
 gtkRandomGithub [number of API requests]
 
+Known Issues:
+=============
+There is an occasional crash due to not doing threading right.
+
 TODO:
 =====
 Allow basic authentication to allow more than that standard limit of 50 requests per hour  
